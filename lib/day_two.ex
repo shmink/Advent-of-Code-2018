@@ -2,6 +2,7 @@ defmodule AdventOfCode.DayTwo do
   @moduledoc """
   Day two of advent of code 2018
   """
+
   @doc """
   To make sure you didn't miss any, you scan the likely candidate boxes again,
   counting the number that have an ID containing exactly two of any letter and
@@ -65,5 +66,67 @@ defmodule AdventOfCode.DayTwo do
       true ->
         %{twos: 0, threes: 0}
     end
+  end
+
+  @doc """
+  The boxes will have IDs which differ by exactly one character at the same position
+  in both strings. For example, given the following box IDs:
+
+      abcde
+      fghij
+      klmno
+      pqrst
+      fguij
+      axcye
+      wvxyz
+
+  The IDs abcde and axcye are close, but they differ by two characters (the second and
+  fourth). However, the IDs fghij and fguij differ by exactly one character, the third
+  (h and u). Those must be the correct boxes.
+  """
+  def two(input, best_match \\ "") do
+    cond do
+      input == [] ->
+        best_match
+
+      length(input) == 2 ->
+        return_better_match(best_match, List.first(input), List.last(input))
+
+      [head | tail] = input ->
+        best_match = baby_recurse(tail, head, best_match)
+        two(tail, best_match)
+    end
+  end
+
+  defp baby_recurse(input, string, best_match \\ "") do
+    case input do
+      [] ->
+        best_match
+
+      [head | tail] ->
+        best_match = return_better_match(best_match, string, head)
+        baby_recurse(tail, string, best_match)
+
+      _ ->
+        {:error, :you_are_dumb}
+    end
+  end
+
+  defp return_better_match(original, string1, string2) do
+    if String.length(original) < String.length(calculate_similarities(string1, string2)) do
+      calculate_similarities(string1, string2)
+    else
+      original
+    end
+  end
+
+  defp calculate_similarities(string1, string2) do
+    values = ""
+
+    similars = String.myers_difference(string1, string2)
+
+    eqs = for {:eq, value} <- similars, do: values <> value
+
+    List.to_string(eqs)
   end
 end
