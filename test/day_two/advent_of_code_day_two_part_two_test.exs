@@ -2,7 +2,7 @@ defmodule AdventOfCode.DayTwo.PartTwo.Test do
   use ExUnit.Case
   alias AdventOfCode.DayTwo
 
-  @tag :daytwo_part2
+  @tag :day_two
   test "full example" do
     full = [
       "abcde",

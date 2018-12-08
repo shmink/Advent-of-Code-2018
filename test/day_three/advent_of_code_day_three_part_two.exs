@@ -1,4 +1,4 @@
-defmodule AdventOfCode.DayThree.PartOne.Test do
+defmodule AdventOfCode.DayThree.PartTwo.Test do
   use ExUnit.Case
   alias AdventOfCode.DayThree
 
@@ -10,6 +10,6 @@ defmodule AdventOfCode.DayThree.PartOne.Test do
       "#3 @ 5,5: 2x2"
     ]
 
-    assert DayThree.one(values) == 4
+    assert DayThree.two(values) == 3
   end
 end

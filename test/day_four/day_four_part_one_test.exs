@@ -1,6 +1,7 @@
-defmodule AdventOfCode.DayFour.Test do
+defmodule AdventOfCode.DayFour.PartOne.Test do
   use ExUnit.Case
 
+  @tag :day_four
   test "full example" do
     test = """
         [1518-11-01 00:00] Guard #10 begins shift

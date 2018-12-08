@@ -2,22 +2,22 @@ defmodule AdventOfCode.DayOne.PartOne.Test do
   use ExUnit.Case
   alias AdventOfCode.DayOne
 
-  @tag :dayone_part1
+  @tag :day_one
   test "first example" do
     assert DayOne.one([+1, -2, +3, +1]) == 3
   end
 
-  @tag :dayone_part1
+  @tag :day_one
   test "second example" do
     assert DayOne.one([+1, +1, +1]) == 3
   end
 
-  @tag :dayone_part1
+  @tag :day_one
   test "third example" do
     assert DayOne.one([+1, +1, -2]) == 0
   end
 
-  @tag :dayone_part1
+  @tag :day_one
   test "fourth example" do
     assert DayOne.one([-1, -2, -3]) == -6
   end
