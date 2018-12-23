@@ -33,11 +33,11 @@ defmodule AdventOfCode.DayFour do
     String.to_integer(most_sleep_id) * most_sleep_minute
   end
 
-  def sum_sleep_time({key, value}, acc) do
+  defp sum_sleep_time({key, value}, acc) do
     Map.put(acc, key, Enum.sum(value))
   end
 
-  def accumulate_sleep_time(sorted_list, {current_id, map}) do
+  defp accumulate_sleep_time(sorted_list, {current_id, map}) do
     id = Map.fetch!(sorted_list, "id")
 
     if id == "" do
@@ -54,7 +54,7 @@ defmodule AdventOfCode.DayFour do
     end
   end
 
-  def extract_guard_id(string) do
+  defp extract_guard_id(string) do
     regex =
       ~r/(?<datetime>\d{4}-\d{2}-\d{2} \d+:(?<minute>\d+)).*(#(?<id>\d+)|(?<status>falls|wakes))/
 
@@ -70,5 +70,37 @@ defmodule AdventOfCode.DayFour do
       "" ->
         result
     end
+  end
+
+  def two(input) do
+    {id, {minute, _}} =
+      input
+      |> Enum.map(&extract_guard_id/1)
+      |> Enum.sort()
+      |> Enum.reduce({nil, %{}}, &accumulate_sleep_time/2)
+      |> elem(1)
+      |> Enum.reduce(%{}, fn {key, value}, map ->
+        if Enum.empty?(value) do
+          map
+        else
+          Map.put(map, key, find_most_sleep_time(value))
+        end
+      end)
+      |> Enum.max_by(fn {_k, {_, f}} -> f end)
+
+    String.to_integer(id) * minute
+  end
+
+  defp find_most_sleep_time(times) do
+    times
+    |> Enum.chunk_every(2)
+    |> Enum.reduce(%{}, fn list, map ->
+      [start, endds | []] = list
+
+      Enum.reduce((start - 1)..(endds * -1), map, fn x, map ->
+        Map.update(map, x, 1, &(&1 + 1))
+      end)
+    end)
+    |> Enum.max_by(fn {_k, v} -> v end)
   end
 end
