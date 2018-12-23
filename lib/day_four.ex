@@ -1,64 +1,74 @@
 defmodule AdventOfCode.DayFour do
+  require IEx
+
   def one(input) do
-    input
-    |> Enum.map(&parser(&1))
-    |> Enum.sort(&(NaiveDateTime.compare(List.first(&1), List.first(&2)) == :gt))
-
-    # Enum.sort(input, ...)
-  end
-
-  def parser(input) do
-    split =
+    # Create a map with the guard ID as key and a list of the minutes
+    # associated to them. "falls asleep" is a minus number
+    data =
       input
-      |> String.split(["[", "-", " ", ":", "]"], trim: true)
+      |> Enum.map(&extract_guard_id/1)
+      |> Enum.sort()
+      |> Enum.reduce({nil, %{}}, &accumulate_sleep_time/2)
+      |> elem(1)
 
-    [yr, mnth, day, hr, min | tail] = split
+    {most_sleep_id, _most_sleep_time} =
+      data
+      |> Enum.reduce(%{}, &sum_sleep_time/2)
+      |> Enum.max_by(fn {_key, value} -> value end)
 
-    parsed = [
-      NaiveDateTime.new(
-        String.to_integer(yr),
-        String.to_integer(mnth),
-        String.to_integer(day),
-        String.to_integer(hr),
-        String.to_integer(min),
-        0
-      ),
-      Enum.join(tail, " ")
-    ]
+    most_sleep_minute =
+      Map.fetch!(data, most_sleep_id)
+      |> Enum.chunk_every(2)
+      |> Enum.reduce(%{}, fn list, map ->
+        [start, endd | []] = list
 
-    [{:ok, naive_date_time}, text] = parsed
-    [naive_date_time, text]
+        Enum.reduce((start - 1)..(endd * -1), map, fn x, map ->
+          # IO.inspect(x)
+          Map.update(map, x, 1, &(&1 + 1))
+        end)
+      end)
+      |> Enum.max_by(fn {_k, v} -> v end)
+      |> elem(0)
+
+    String.to_integer(most_sleep_id) * most_sleep_minute
   end
 
-  def input do
-    [
-      "[1518-08-19 00:35] wakes up",
-      "[1518-06-06 23:56] Guard #179 begins shift",
-      "[1518-11-11 23:56] Guard #2269 begins shift",
-      "[1518-05-18 00:15] falls asleep",
-      "[1518-07-28 00:52] wakes up",
-      "[1518-07-09 00:25] falls asleep",
-      "[1518-03-09 00:21] falls asleep",
-      "[1518-09-02 00:37] wakes up",
-      "[1518-04-17 00:09] falls asleep",
-      "[1518-04-05 00:17] wakes up",
-      "[1518-05-12 00:56] wakes up",
-      "[1518-04-30 00:46] wakes up",
-      "[1518-07-18 00:57] falls asleep",
-      "[1518-07-11 00:37] falls asleep",
-      "[1518-10-13 00:12] falls asleep",
-      "[1518-04-09 23:59] Guard #1913 begins shift",
-      "[1518-08-10 00:04] Guard #421 begins shift",
-      "[1518-10-05 00:35] wakes up",
-      "[1518-08-27 00:54] wakes up",
-      "[1518-10-07 23:57] Guard #179 begins shift",
-      "[1518-10-05 00:23] falls asleep",
-      "[1518-06-11 00:45] falls asleep",
-      "[1518-09-01 00:51] wakes up",
-      "[1518-10-28 23:58] Guard #277 begins shift",
-      "[1518-09-11 00:03] Guard #179 begins shift",
-      "[1518-05-14 00:54] wakes up",
-      "[1518-11-14 00:23] falls asleep"
-    ]
+  def sum_sleep_time({key, value}, acc) do
+    Map.put(acc, key, Enum.sum(value))
+  end
+
+  def accumulate_sleep_time(sorted_list, {current_id, map}) do
+    id = Map.fetch!(sorted_list, "id")
+
+    if id == "" do
+      {_pop, map} =
+        Map.get_and_update!(map, current_id, fn list ->
+          minute = Map.fetch!(sorted_list, "minute")
+          {list, [minute | list]}
+        end)
+
+      {current_id, map}
+    else
+      map = Map.put_new(map, id, [])
+      {id, map}
+    end
+  end
+
+  def extract_guard_id(string) do
+    regex =
+      ~r/(?<datetime>\d{4}-\d{2}-\d{2} \d+:(?<minute>\d+)).*(#(?<id>\d+)|(?<status>falls|wakes))/
+
+    result = regex |> Regex.named_captures(string)
+
+    case Map.fetch!(result, "status") do
+      "falls" ->
+        %{result | "minute" => String.to_integer(Map.fetch!(result, "minute")) * -1}
+
+      "wakes" ->
+        %{result | "minute" => String.to_integer(Map.fetch!(result, "minute"))}
+
+      "" ->
+        result
+    end
   end
 end
