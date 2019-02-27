@@ -1,5 +1,10 @@
 # AdventOfCode
 
+
+[![codecov](https://codecov.io/gh/shmink/Advent-of-Code-2018/branch/master/graph/badge.svg)](https://codecov.io/gh/shmink/Advent-of-Code-2018)
+
+
+
 **TODO: Add description**
 
 ## Installation
