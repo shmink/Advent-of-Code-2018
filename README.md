@@ -1,7 +1,7 @@
 # AdventOfCode
 
 
-[![codecov](https://codecov.io/gh/shmink/Advent-of-Code-2018/branch/master/graph/badge.svg)](https://codecov.io/gh/shmink/Advent-of-Code-2018)
+[![CircleCI](https://circleci.com/gh/shmink/Advent-of-Code-2018.svg?style=svg)](https://circleci.com/gh/shmink/Advent-of-Code-2018)[![codecov](https://codecov.io/gh/shmink/Advent-of-Code-2018/branch/master/graph/badge.svg)](https://codecov.io/gh/shmink/Advent-of-Code-2018)
 
 
 
