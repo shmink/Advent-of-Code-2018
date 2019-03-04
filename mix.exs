@@ -31,7 +31,8 @@ defmodule AdventOfCode.MixProject do
       {:combination, "~> 0.0.3"},
       {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
       {:exsync, "~> 0.2", only: :dev},
-      {:excoveralls, "~> 0.10.5"}
+      {:excoveralls, "~> 0.10.5"},
+      {:inch_ex, only: :docs}
     ]
   end
 end
