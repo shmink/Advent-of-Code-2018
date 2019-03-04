@@ -9,7 +9,7 @@ defmodule AdventOfCode.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       preferred_cli_env: [
-        "coveralls": :test,
+        coveralls: :test,
         "coveralls.html": :test,
         "coveralls.json": :test,
       ],
