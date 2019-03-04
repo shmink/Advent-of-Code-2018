@@ -12,8 +12,6 @@ jobs:
       - run: mix local.rebar --force
       - run: mix deps.get
       - run: mix test
-      - run:
-          - name: Successful build
-          - when: on_success
-          - command: MIX_ENV=docs mix deps.get
-          - command: MIX_ENV=docs mix inch.report
+      - run: curl -s https://codecov.io/bash | bash
+      - run: MIX_ENV=docs mix deps.get
+      - run: MIX_ENV=docs mix inch.report
