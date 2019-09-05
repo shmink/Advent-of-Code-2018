@@ -1,6 +1,5 @@
 # AdventOfCode
 
-
 [![CircleCI](https://circleci.com/gh/shmink/Advent-of-Code-2018.svg?style=svg)](https://circleci.com/gh/shmink/Advent-of-Code-2018) [![Coverage Status](https://coveralls.io/repos/github/shmink/Advent-of-Code-2018/badge.svg?branch=master)](https://coveralls.io/github/shmink/Advent-of-Code-2018?branch=master) [![Inline docs](http://inch-ci.org/github/shmink/advent-of-code-2018.svg?branch=master)](http://inch-ci.org/github/shmink/advent-of-code-2018)
 
 
